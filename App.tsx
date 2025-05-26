@@ -9,6 +9,7 @@ import {
 import useBLE from "./useBLE";
 import DeviceModal from "./DeviceModal";
 
+
 const App = () => {
   const {
     requestPermissions,
