@@ -11,4 +11,4 @@ export const obtenerUbicacion = async (): Promise<string> => {
 
   return `${latitude};${longitude}`; // entrega un string con latitud y longitud separadas por punto y coma
 };
-
+  
