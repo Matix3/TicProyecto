@@ -8,6 +8,9 @@ import {
 } from "react-native-ble-plx";
 import * as ExpoDevice from "expo-device";
 import base64 from "react-native-base64";
+import { enviarLog } from "./service"; 
+import { obtenerUbicacion } from "./location"; 
+
 
 const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const CHARACTERISTIC_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
@@ -69,21 +72,30 @@ function useBLE() {
   };
 
   const startDataStreaming = (device: Device) => {
-    device.monitorCharacteristicForService(
-      SERVICE_UUID,
-      CHARACTERISTIC_UUID,
-      (error: BleError | null, characteristic: Characteristic | null) => {
-        if (error) {
-          console.log("Monitor error:", error);
-          return;
-        }
-        if (characteristic?.value) {
-          const decoded = base64.decode(characteristic.value);
-          setMessageLog(prev => [...prev, decoded]);
+  device.monitorCharacteristicForService(
+    SERVICE_UUID,
+    CHARACTERISTIC_UUID,
+    async (error: BleError | null, characteristic: Characteristic | null) => {
+      if (error) {
+        console.log("Monitor error:", error);
+        return;
+      }
+      if (characteristic?.value) {
+        const decoded = base64.decode(characteristic.value);
+
+        
+        setMessageLog(prev => [...prev, decoded]);
+        try {
+          await enviarLog(device.id, decoded); // Aquí se hace la petición GET
+        } catch (err) {
+          console.log("Error al enviar el log:", err);
         }
       }
-    );
-  };
+    }
+  );
+};
+
+
 
   const disconnectFromDevice = async () => {
     if (connectedDevice) {

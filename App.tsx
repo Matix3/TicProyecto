@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import useBLE from "./useBLE";
 import DeviceModal from "./DeviceModal";
-
+import { enviarLog } from "./service"; 
 
 const App = () => {
   const {
@@ -29,6 +29,7 @@ const App = () => {
       setIsModalVisible(true);
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
